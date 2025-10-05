@@ -12,11 +12,29 @@ export default function KazoeBeats({ theme }) {
   const [feedback, setFeedback] = useState(null);
   const [usedNumbers, setUsedNumbers] = useState(new Set());
 
-  const speakNumber = (num) => {
-    const utterance = new SpeechSynthesisUtterance(num.toString());
+ const speakNumber = (num) => {
+  // Check if voices are already loaded
+  const voices = window.speechSynthesis.getVoices();
+  const japaneseVoice = voices.find(voice => voice.lang === "ja-JP");
+
+  const utterance = new SpeechSynthesisUtterance(num.toString());
+  
+  // Set the voice if found, otherwise fall back to the language tag
+  if (japaneseVoice) {
+    utterance.voice = japaneseVoice;
+  } else {
+    // This fallback might not work, but it's good practice
     utterance.lang = "ja-JP";
-    speechSynthesis.speak(utterance);
-  };
+  }
+
+  speechSynthesis.speak(utterance);
+};
+
+// Add a listener to ensure voices are available
+window.speechSynthesis.onvoiceschanged = () => {
+  // You can now call speakNumber safely, as voices are loaded
+  // Example: speakNumber(5);
+};
 
   const generateUniqueNumber = () => {
     if (usedNumbers.size >= range + 1) setUsedNumbers(new Set());
