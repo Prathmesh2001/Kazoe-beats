@@ -9,7 +9,7 @@ export default function About() {
         Very essential if you want to open Fruit shop in Japan! 😉
       </p>
       <a
-        href="https://github.com/Prathmesh2001"
+        href="https://github.com/Prathmesh2001/Kazoe-beats"
         target="_blank"
         rel="noopener noreferrer"
         className="btn"
