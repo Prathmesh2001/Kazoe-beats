@@ -1,16 +1,49 @@
-# React + Vite
+# 🎧 Kazoe Beats  
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Train your Japanese number skills (数の練習) with beats!**  
+Kazoe Beats is a fun, minimal, and responsive web app built to help Nihongo learners master Japanese counting through quick interactive quizzes.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## React Compiler
+✨ **Modern UI**
+- Gen-Z inspired light & dark theme  
+- Smooth color transitions  
+- Mobile-friendly design  
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+🎮 **Interactive Quiz**
+- Choose your **difficulty** (0–10, 0–100, 0–1000)  
+- Select number of **questions** (5–20)  
+- Non-repeating random numbers  
+- Real-time feedback on correct/incorrect answers  
 
-## Expanding the ESLint configuration
+🧠 **Extendable**
+- Easily add more quiz types (Kanji → Numbers, Romanji → Kanji, etc.)  
+- Future ideas include score tracking, leaderboard, and streaks 🔥  
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🧩 Tech Stack
+
+| Technology | Purpose |
+|-------------|----------|
+| **HTML5 / CSS3 / JavaScript (Vanilla)** | Frontend |
+| **Custom CSS** | Styling with dark/light mode |
+| **Vite** | Dev server and bundler |
+| **GitHub Pages** | Hosting |
+
+---
+
+## 🖼️ Preview
+
+![Kazoe Beats Preview](https://github.com/Prathmesh2001/kazoe-beats/assets/preview-image.png)
+
+---
+
+## ⚙️ How to Run Locally
+
+1. **Clone this repo**
+   ```bash
+   git clone https://github.com/Prathmesh2001/kazoe-beats.git
+   cd kazoe-beats
