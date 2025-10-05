@@ -12,22 +12,37 @@ export default function KazoeBeats({ theme }) {
   const [feedback, setFeedback] = useState(null);
   const [usedNumbers, setUsedNumbers] = useState(new Set());
 
- const speakNumber = (num) => {
-  // Check if voices are already loaded
+ let japaneseVoice = null;
+
+// This listener waits for the voices to be loaded
+const setJapaneseVoice = () => {
   const voices = window.speechSynthesis.getVoices();
-  const japaneseVoice = voices.find(voice => voice.lang === "ja-JP");
-
-  const utterance = new SpeechSynthesisUtterance(num.toString());
-  
-  // Set the voice if found, otherwise fall back to the language tag
-  if (japaneseVoice) {
-    utterance.voice = japaneseVoice;
-  } else {
-    // This fallback might not work, but it's good practice
-    utterance.lang = "ja-JP";
+  // Find a suitable Japanese voice, preferably a higher-quality female one
+  japaneseVoice = voices.find(voice => voice.name === "Kyoko" || voice.name.includes("ja-JP") && voice.name.includes("Female"));
+  if (!japaneseVoice) {
+    // Fallback to a general Japanese voice if a specific one isn't found
+    japaneseVoice = voices.find(voice => voice.lang === "ja-JP");
   }
+};
 
-  speechSynthesis.speak(utterance);
+if (window.speechSynthesis) {
+  setJapaneseVoice(); // Try to set the voice immediately
+  window.speechSynthesis.onvoiceschanged = setJapaneseVoice; // Update if voices change
+}
+
+const speakNumber = (num) => {
+  if (japaneseVoice) {
+    const utterance = new SpeechSynthesisUtterance(num.toString());
+    utterance.voice = japaneseVoice;
+    utterance.lang = "ja-JP"; // Good to keep for redundancy
+    speechSynthesis.speak(utterance);
+  } else {
+    // Fallback if no specific Japanese voice was found
+    console.warn("Could not find a specific Japanese voice. Using default.");
+    const utterance = new SpeechSynthesisUtterance(num.toString());
+    utterance.lang = "ja-JP";
+    speechSynthesis.speak(utterance);
+  }
 };
 
 // Add a listener to ensure voices are available
