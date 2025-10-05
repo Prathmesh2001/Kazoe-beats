@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://Prathmesh2001.github.io/kazoe-beats",
+  "homepage": "https://prathmesh2001.github.io/Kazoe-beats/",
 
   "scripts": {
     "dev": "vite",
