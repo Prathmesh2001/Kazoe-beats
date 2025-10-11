@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { speakJapaneseNumber, initJapaneseVoice } from "../utils/speechUtilsJP";
 
 export default function KazoeBeats({ theme }) {
   const [range, setRange] = useState(10);
@@ -12,44 +13,7 @@ export default function KazoeBeats({ theme }) {
   const [feedback, setFeedback] = useState(null);
   const [usedNumbers, setUsedNumbers] = useState(new Set());
 
- let japaneseVoice = null;
-
-// This listener waits for the voices to be loaded
-const setJapaneseVoice = () => {
-  const voices = window.speechSynthesis.getVoices();
-  // Find a suitable Japanese voice, preferably a higher-quality female one
-  japaneseVoice = voices.find(voice => voice.name === "Kyoko" || voice.name.includes("ja-JP") && voice.name.includes("Female"));
-  if (!japaneseVoice) {
-    // Fallback to a general Japanese voice if a specific one isn't found
-    japaneseVoice = voices.find(voice => voice.lang === "ja-JP");
-  }
-};
-
-if (window.speechSynthesis) {
-  setJapaneseVoice(); // Try to set the voice immediately
-  window.speechSynthesis.onvoiceschanged = setJapaneseVoice; // Update if voices change
-}
-
-const speakNumber = (num) => {
-  if (japaneseVoice) {
-    const utterance = new SpeechSynthesisUtterance(num.toString());
-    utterance.voice = japaneseVoice;
-    utterance.lang = "ja-JP"; // Good to keep for redundancy
-    speechSynthesis.speak(utterance);
-  } else {
-    // Fallback if no specific Japanese voice was found
-    console.warn("Could not find a specific Japanese voice. Using default.");
-    const utterance = new SpeechSynthesisUtterance(num.toString());
-    utterance.lang = "ja-JP";
-    speechSynthesis.speak(utterance);
-  }
-};
-
-// Add a listener to ensure voices are available
-window.speechSynthesis.onvoiceschanged = () => {
-  // You can now call speakNumber safely, as voices are loaded
-  // Example: speakNumber(5);
-};
+  initJapaneseVoice();
 
   const generateUniqueNumber = () => {
     if (usedNumbers.size >= range + 1) setUsedNumbers(new Set());
@@ -76,11 +40,11 @@ window.speechSynthesis.onvoiceschanged = () => {
     setUserInput("");
     setRevealed(false);
     setFeedback(null);
-    speakNumber(randomNum);
+    speakJapaneseNumber(randomNum);
   };
 
   const handleRepeat = () => {
-    if (number !== null) speakNumber(number);
+    if (number !== null) speakJapaneseNumber(number);
   };
 
   const checkAnswer = () => {
@@ -116,10 +80,7 @@ window.speechSynthesis.onvoiceschanged = () => {
           <h2>🎮 Start Training</h2>
           <div className="form-group">
             <label>Difficulty</label>
-            <select
-              value={range}
-              onChange={(e) => setRange(Number(e.target.value))}
-            >
+            <select value={range} onChange={(e) => setRange(Number(e.target.value))}>
               <option value="10">0–10</option>
               <option value="100">0–100</option>
               <option value="1000">0–1000</option>
@@ -134,9 +95,7 @@ window.speechSynthesis.onvoiceschanged = () => {
               onChange={(e) => setQuestionCount(Number(e.target.value))}
             >
               {[5, 10, 15, 20].map((n) => (
-                <option key={n} value={n}>
-                  {n}
-                </option>
+                <option key={n} value={n}>{n}</option>
               ))}
             </select>
           </div>
@@ -154,12 +113,8 @@ window.speechSynthesis.onvoiceschanged = () => {
           </h3>
 
           <div className="actions">
-            <button className="btn small" onClick={handleRepeat}>
-              🔁 Repeat
-            </button>
-            <button className="btn small" onClick={() => setRevealed(true)}>
-              👀 Reveal
-            </button>
+            <button className="btn small" onClick={handleRepeat}>🔁 Repeat</button>
+            <button className="btn small" onClick={() => setRevealed(true)}>👀 Reveal</button>
           </div>
 
           {revealed && <div className="number">{number}</div>}
@@ -178,11 +133,7 @@ window.speechSynthesis.onvoiceschanged = () => {
           )}
 
           {feedback && (
-            <p
-              className={`feedback ${
-                feedback === "correct" ? "correct" : "wrong"
-              }`}
-            >
+            <p className={`feedback ${feedback === "correct" ? "correct" : "wrong"}`}>
               {feedback === "correct" ? "✔️ Correct!" : "❌ Wrong!"}
             </p>
           )}
@@ -192,12 +143,8 @@ window.speechSynthesis.onvoiceschanged = () => {
       {gameOver && (
         <div className="result">
           <h2>🎉 All done!</h2>
-          <p>
-            You scored <strong>{score}</strong> / {questionCount}
-          </p>
-          <button className="btn" onClick={resetGame}>
-            🔁 Play Again
-          </button>
+          <p>You scored <strong>{score}</strong> / {questionCount}</p>
+          <button className="btn" onClick={resetGame}>🔁 Play Again</button>
         </div>
       )}
     </div>

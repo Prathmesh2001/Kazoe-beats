@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 import KazoeBeats from "./pages/KazoeBeats";
 import Counters from "./pages/Counters";
 import About from "./pages/About";
+import ListeningMode from "./pages/ListeningMode";
 import "./App.css";
 
 export default function App() {
@@ -18,6 +19,7 @@ export default function App() {
 
         <Routes>
           <Route path="/" element={<KazoeBeats theme={theme} />} />
+          <Route path="/listening" element={<ListeningMode />} />
           <Route path="/counters" element={<Counters />} />
           <Route path="/about" element={<About />} />
         </Routes>

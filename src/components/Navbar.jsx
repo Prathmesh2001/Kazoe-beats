@@ -11,6 +11,9 @@ export default function Navbar({ theme, toggleTheme }) {
         <li className={location.pathname === "/" ? "active" : ""}>
           <Link to="/">Beats</Link>
         </li>
+        <li className={location.pathname === "/listening" ? "active" : ""}>
+          <Link to="/listening">Listening</Link>
+        </li>
         <li className={location.pathname === "/counters" ? "active" : ""}>
           <Link to="/counters">Counters</Link>
         </li>
