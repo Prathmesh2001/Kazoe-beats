@@ -30,17 +30,19 @@ const COUNTER_READINGS = {
 };
 
 // --- Main function ---
-export const speakJapaneseNumber = (num, counter, objectJP = "") => {
+export const speakJapaneseNumber = (num, counter = "", objectJP = "") => {
   if (!japaneseVoice) initJapaneseVoice();
 
   let phrase = "";
-
-  if (COUNTER_READINGS[counter] && num >= 1 && num <= 10) {
+  if (counter && COUNTER_READINGS[counter] && num >= 1 && num <= 10) {
     phrase = `${COUNTER_READINGS[counter][num - 1]} ${objectJP}`;
+  } else if (!counter || counter === "") {
+    phrase = `${num}`;
   } else {
     phrase = `${num}${counter} ${objectJP}`;
   }
 
+  window.speechSynthesis.cancel(); // Clear queue before speaking
   const utterance = new SpeechSynthesisUtterance(phrase);
   utterance.voice = japaneseVoice;
   utterance.lang = "ja-JP";

@@ -40,7 +40,7 @@ export default function KazoeBeats({ theme }) {
     setUserInput("");
     setRevealed(false);
     setFeedback(null);
-    speakJapaneseNumber(randomNum);
+    speakJapaneseNumber(randomNum, "");
   };
 
   const handleRepeat = () => {
