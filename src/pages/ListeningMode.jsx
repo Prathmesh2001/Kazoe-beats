@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { speakJapaneseNumber, initJapaneseVoice } from "../utils/speechUtilsJP";
 
-// Configurable constants for select options
 const DIFFICULTY_OPTIONS = [
   { value: 10, label: "0–10" },
   { value: 100, label: "0–100" },
@@ -26,62 +25,67 @@ export default function ListeningMode() {
   const [numbers, setNumbers] = useState([]);
   const [index, setIndex] = useState(0);
   const intervalRef = useRef(null);
+  const [itemsSpoken, setItemsSpoken] = useState(0);
+  const totalIterationsRef = useRef(0);
 
   useEffect(() => {
     initJapaneseVoice();
   }, []);
 
-  // Generate a list of unique numbers
   const generateNumbers = (limit) => {
     const list = [];
-    const count = 500;
-    while (list.length < count) {
+    const maxCount = 500;
+    const targetCount = Math.min(maxCount, limit + 1);
+    while (list.length < targetCount) {
       const n = Math.floor(Math.random() * (limit + 1));
-      if (!list.includes(n)) list.push(n);
+      if (!list.includes(n)) {
+        list.push(n);
+      }
     }
     setNumbers(list);
     setIndex(0);
+    return list;
   };
 
-  // Start passive listening
   const startListening = () => {
     let activeNumbers = numbers;
     if (!activeNumbers.length) {
-      const list = [];
-      const count = 500;
-      while (list.length < count) {
-        const n = Math.floor(Math.random() * (range + 1));
-        if (!list.includes(n)) list.push(n);
-      }
-      activeNumbers = list;
-      setNumbers(list);
+      activeNumbers = generateNumbers(range);
     }
-    if (!activeNumbers.length) return;
-    setIsPlaying(true);
-    let currentIndex = 0;
+    if (!activeNumbers.length) {
+      alert("Could not generate numbers to speak.");
+      return;
+    }
+    const totalDuration = duration * 60 * 1000;
     const delay = intervalSec * 1000;
+    const maxIterationsFromTime = Math.floor(totalDuration / delay);
+    totalIterationsRef.current = Math.min(activeNumbers.length, maxIterationsFromTime);
+    if (totalIterationsRef.current === 0) {
+      alert("Duration is too short for the selected interval.");
+      return;
+    }
+    setIsPlaying(true);
+    setItemsSpoken(0);
+    let count = 0;
     const speakNext = () => {
-      const currentNum = activeNumbers[currentIndex];
-      if (typeof currentNum === "number") {
-        speakJapaneseNumber(currentNum);
-      }
-    };
-    speakNext();
-    intervalRef.current = setInterval(() => {
-      currentIndex++;
-      if (currentIndex >= activeNumbers.length) {
+      if (count >= totalIterationsRef.current) {
         clearInterval(intervalRef.current);
         setIsPlaying(false);
-      } else {
-        speakNext();
+        return;
       }
-    }, delay);
+      const currentNum = activeNumbers[count];
+      speakJapaneseNumber(currentNum);
+      setItemsSpoken(count + 1);
+      count++;
+    };
+    speakNext();
+    intervalRef.current = setInterval(speakNext, delay);
   };
 
-  // Stop listening
   const stopListening = () => {
     clearInterval(intervalRef.current);
     setIsPlaying(false);
+    window.speechSynthesis.cancel();
   };
 
   return (
@@ -113,7 +117,11 @@ export default function ListeningMode() {
             ))}
           </select>
         </div>
-        {/* You can add more config or input fields here as needed */}
+        {isPlaying && (
+          <p className="progress-display">
+            Current: {itemsSpoken} / {totalIterationsRef.current}
+          </p>
+        )}
         {!isPlaying ? (
           <button className="btn start" onClick={startListening}>▶️ Start</button>
         ) : (

@@ -301,6 +301,12 @@ input[type="number"] {
   font-size: 0.95rem;
 }
 
+.level-selection {
+  margin: 1rem 0;
+  display: flex;
+  gap: 10px;
+}
+
 .counter-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -310,14 +316,16 @@ input[type="number"] {
 .counter-card {
   border: 1px solid #eee;
   border-radius: 10px;
-  padding: 0.75rem;
+  padding: 0.2rem 0.75rem;
   text-align: center;
-  transition: all 0.3s ease;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
 }
 
 .counter-card:hover {
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  transform: translateY(-2px);
+  border: 2px solid #eee;
+  border-radius: 15px;
+  background-color: #603fccbf;
 }
 
 .counter-btn {
@@ -328,8 +336,9 @@ input[type="number"] {
   font-size: 1rem;
 }
 
-.counter-btn.selected {
-  background: #4f46e5;
+.selected {
+  background: #5d55eb;
+  color: white;
 }
 
 .counter-usage {
